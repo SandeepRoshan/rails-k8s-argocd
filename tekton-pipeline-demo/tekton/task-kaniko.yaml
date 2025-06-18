@@ -1,0 +1,12 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: kaniko
+spec:
+  steps:
+    - name: kaniko-build
+      image: gcr.io/kaniko-project/executor:latest
+      args:
+        - "--context=dir:///workspace/source"
+        - "--dockerfile=/workspace/source/Dockerfile"
+        - "--destination=docker.io/yourusername/demo:latest"
