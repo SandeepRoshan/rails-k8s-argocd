@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: repo-creds
+  namespace: argocd
+  labels:
+    argocd.argoproj.io/secret-type: repository
+stringData:
+  url: https://github.com/SandeepRoshan/rails-k8s-argocd.git
+  username: SandeepRoshan
+  password: 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
+type: Opaque

@@ -1,0 +1,35 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: kaniko
+spec:
+  params:
+    - name: git-url
+      type: string
+    - name: image-url
+      type: string
+  workspaces:
+    - name: shared-workspace
+  steps:
+    - name: clone-repo
+      image: alpine/git
+      script: |
+        #!/bin/sh
+        echo "Using token: ${GITHUB_TOKEN:0:4}********"
+        git clone https://${GITHUB_TOKEN}@github.com/SandeepRoshan/rails-k8s-argocd.git /workspace/shared-workspace
+      env:
+        - name: GITHUB_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: github-token
+              key: token
+
+    - name: kaniko-build
+      image: gcr.io/kaniko-project/executor:latest
+      env:
+        - name: DOCKER_CONFIG
+          value: /tekton/home/.docker/
+      args:
+        - "--dockerfile=/workspace/shared-workspace/Dockerfile"
+        - "--context=/workspace/shared-workspace"
+        - "--destination=$(params.image-url)"

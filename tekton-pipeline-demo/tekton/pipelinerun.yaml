@@ -1,0 +1,16 @@
+apiVersion: tekton.dev/v1beta1
+kind: PipelineRun
+metadata:
+  generateName: build-and-push-run-  # <-- Tekton will auto-generate a name like build-and-push-run-xyz12
+  namespace: default
+spec:
+  pipelineRef:
+    name: build-and-push-pipeline
+  params:
+    - name: git-url
+      value: https://github.com/SandeepRoshan/rails-k8s-argocd.git
+    - name: image-url
+      value: docker.io/mickleson/myapp:latest
+  workspaces:
+    - name: shared-workspace
+      emptyDir: {}
