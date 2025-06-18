@@ -1,6 +1,7 @@
 apiVersion: tekton.dev/v1beta1
 kind: PipelineRun
 metadata:
+<<<<<<< HEAD
   generateName: build-and-push-run-  # <-- Tekton will auto-generate a name like build-and-push-run-xyz12
   namespace: default
 spec:
@@ -14,3 +15,9 @@ spec:
   workspaces:
     - name: shared-workspace
       emptyDir: {}
+=======
+  name: build-and-push-run
+spec:
+  pipelineRef:
+    name: build-and-push-pipeline
+>>>>>>> 6dc1e26133018ca07e10a72ecf62669e399c0cf3

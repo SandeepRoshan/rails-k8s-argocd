@@ -3,6 +3,7 @@ kind: Pipeline
 metadata:
   name: build-and-push-pipeline
 spec:
+<<<<<<< HEAD
   params:
     - name: git-url
       type: string
@@ -22,3 +23,9 @@ spec:
       workspaces:
         - name: shared-workspace
           workspace: shared-workspace
+=======
+  tasks:
+    - name: build-and-push
+      taskRef:
+        name: kaniko
+>>>>>>> 6dc1e26133018ca07e10a72ecf62669e399c0cf3

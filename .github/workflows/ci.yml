@@ -1,0 +1,72 @@
+name: "Ruby on Rails CI"
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:11-alpine
+        ports:
+          - "5432:5432"
+        env:
+          POSTGRES_DB: rails_test
+          POSTGRES_USER: rails
+          POSTGRES_PASSWORD: password
+    env:
+      RAILS_ENV: test
+      DATABASE_URL: "postgres://rails:password@localhost:5432/rails_test"
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.2.2
+          bundler-cache: true
+
+      - name: Install dependencies
+        run: bundle install
+        working-directory: docker_setup/myapp
+
+      - name: Load database schema
+        run: bundle exec rails db:schema:load
+        working-directory: docker_setup/myapp
+
+      - name: Run tests
+        run: bundle exec rake
+        working-directory: docker_setup/myapp
+
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.2.2
+          bundler-cache: true
+
+      - name: Install dependencies
+        run: bundle install
+        working-directory: docker_setup/myapp
+
+      - name: Security audit (bundler-audit)
+        run: bundle exec bundler-audit --update
+        working-directory: docker_setup/myapp
+
+      - name: Security audit (brakeman)
+        run: bundle exec brakeman -q -w2
+        working-directory: docker_setup/myapp
+
+      - name: Lint Ruby files (rubocop)
+        run: bundle exec rubocop --parallel
+        working-directory: docker_setup/myapp
