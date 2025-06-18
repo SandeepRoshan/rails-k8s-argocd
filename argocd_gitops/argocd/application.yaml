@@ -6,9 +6,9 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: git@github.com:yourusername/private-repo.git
+    repoURL: git@github.com:SandeepRoshan/rails-k8s-argocd.git
     targetRevision: HEAD
-    path: devops_step2_kubernetes_manifests/k8s_manifests
+    path: kubernetes_manifests/k8s_manifests
   destination:
     server: https://kubernetes.default.svc
     namespace: default
