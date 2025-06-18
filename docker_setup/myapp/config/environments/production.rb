@@ -88,5 +88,4 @@ Rails.application.configure do
   # config.host_authorization = { exclude: ->(request) { request.path == "/up" } }
   # Prevent database connection during asset precompilation
   config.assets.initialize_on_precompile = false
-
 end
